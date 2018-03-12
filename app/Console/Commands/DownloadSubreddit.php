@@ -3,6 +3,8 @@
 namespace FeedMe\Console\Commands;
 
 use Illuminate\Console\Command;
+use GuzzleHttp\Client;
+use NikitaPavets\Reddit\RedditFacade;
 
 class DownloadSubreddit extends Command
 {
@@ -27,6 +29,17 @@ class DownloadSubreddit extends Command
      */
     public function handle()
     {
-        $this->info("#> Start to download subreddit.");
+        RedditFacade::test();
+
+        $client = new Client([
+            // Base URI is used with relative requests
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+            'headers' => [
+                'User-Agent' => 'testing/1.0'
+            ]
+        ]);
+        $response = $client->get('https://reddit.com/subreddits/default.json');
+        dd(json_decode($response->getBody(), true));
     }
 }

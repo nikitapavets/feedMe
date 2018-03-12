@@ -150,6 +150,7 @@ return [
         /*
          * Package Service Providers...
          */
+        NikitaPavets\Reddit\RedditServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -24,7 +24,8 @@
             "database/factories"
         ],
         "psr-4": {
-            "FeedMe\\": "app/"
+            "FeedMe\\": "app/",
+            "NikitaPavets\\Reddit\\": "packages/nikitapavets/reddit/src"
         }
     },
     "autoload-dev": {
