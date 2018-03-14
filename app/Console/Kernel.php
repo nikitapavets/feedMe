@@ -2,7 +2,7 @@
 
 namespace FeedMe\Console;
 
-use FeedMe\Console\Commands\DownloadSubreddit;
+use FeedMe\Console\Commands\Reddit\DownloadSubreddit;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

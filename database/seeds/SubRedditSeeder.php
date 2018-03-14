@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use FeedMe\Models\SubReddit;
 
-class DatabaseSeeder extends Seeder
+class SubRedditSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(SubRedditSeeder::class);
-         $this->call(SubRedditPostSeeder::class);
+        factory(SubReddit::class, config('seeder.count.sub_reddits'))->create();
     }
 }

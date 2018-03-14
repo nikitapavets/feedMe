@@ -3,6 +3,7 @@
 namespace NikitaPavets\Reddit;
 
 use Illuminate\Support\ServiceProvider;
+use GuzzleHttp\Client;
 
 class RedditServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,9 @@ class RedditServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/config/reddit.php' => config_path('reddit.php'),
+        ]);
     }
 
     /**
@@ -23,8 +26,19 @@ class RedditServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__.'/config/reddit.php', 'reddit'
+        );
+
         $this->app->singleton('reddit', function ($app) {
-            return new RedditService();
+            $client = new Client([
+                'timeout' => 5.0,
+                'headers' => [
+                    'User-Agent' => 'feedMe',
+                ],
+            ]);
+
+            return new RedditService($client);
         });
     }
 }
