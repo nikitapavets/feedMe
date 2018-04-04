@@ -1,9 +1,15 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "feedme",
+    "description": "feedme - news area",
+    "keywords": ["feedme"],
     "license": "MIT",
     "type": "project",
+    "authors": [
+        {
+            "name": "Nikita Pavets",
+            "email": "nikitapavets@gmail.com"
+        }
+    ],
     "require": {
         "php": ">=7.1.3",
         "fideloper/proxy": "~4.0",

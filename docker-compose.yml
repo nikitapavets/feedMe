@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/:/var/www/html
+      - ./apache.conf:/etc/apache2/sites-enabled/000-default.conf
+    working_dir: /var/www/html
+    restart: always
+    expose:
+      - "80"
+    ports:
+      - "8000:80"
+    command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+    depends_on:
+      - database
+      - redis
+
+  database:
+    image: mysql:5.7.21
+    volumes:
+       - ./dbdata:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root-secret
+      MYSQL_DATABASE: feedme
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: developer-secret
+    ports:
+      - "33061:3306"
+
+  redis:
+    image: redis:alpine
+    restart: always
+
+  supervisor:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/:/var/www/html
+      - ./supervisor.conf:/etc/supervisor.conf
+    restart: always
+    command: ["/usr/bin/supervisord", "-c", "/etc/supervisor.conf"]
+    depends_on:
+      - database
+      - redis
