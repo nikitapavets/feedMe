@@ -35,8 +35,8 @@ class RedditService
     private function parseSubRedditResponse($decodedResponse)
     {
         $response = [
-            'id'          => '',
-            'name'        => '',
+            'name'          => '',
+            'title'        => '',
             'after'       => $decodedResponse['data']['after'],
             'posts_count' => $decodedResponse['data']['dist'],
             'posts'       => [],
@@ -44,8 +44,8 @@ class RedditService
 
         if ($response['posts_count'] > 0) {
             $post = $decodedResponse['data']['children'][0]['data'];
-            $response['id'] = $post['subreddit_id'];
-            $response['name'] = $post['subreddit'];
+            $response['name'] = $post['subreddit_id'];
+            $response['title'] = $post['subreddit'];
         }
 
         for ($postNumber = 0; $postNumber < $response['posts_count']; $postNumber++) {
@@ -63,7 +63,7 @@ class RedditService
             'title'      => $subReddit['title'],
             'author'      => $subReddit['author'],
             'domain'      => $subReddit['domain'],
-            'created_at' => $subReddit['created'],
+            'created_at' => date('Y-m-d H:i:s', $subReddit['created']),
         ];
     }
 

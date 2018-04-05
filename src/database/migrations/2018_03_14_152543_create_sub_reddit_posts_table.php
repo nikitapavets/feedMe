@@ -16,8 +16,8 @@ class CreateSubRedditPostsTable extends Migration
         Schema::create('sub_reddit_posts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('sub_reddit_id');
-            $table->string('name');
-            $table->string('title');
+            $table->string('name')->unique();
+            $table->string('title', 1000);
             $table->string('author');
             $table->string('domain');
             $table->timestamps();

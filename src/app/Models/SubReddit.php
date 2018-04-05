@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubReddit extends Model
 {
+    protected $fillable = [
+        'name',
+        'title',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */

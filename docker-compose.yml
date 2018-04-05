@@ -22,13 +22,13 @@ services:
   database:
     image: mysql:5.7.21
     volumes:
-       - ./dbdata:/var/lib/mysql
+      - ./dbdata:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root-secret
-      MYSQL_DATABASE: feedme
-      MYSQL_USER: developer
-      MYSQL_PASSWORD: developer-secret
+      - MYSQL_ROOT_PASSWORD=root_secret
+      - MYSQL_DATABASE=feedme
+      - MYSQL_USER=developer
+      - MYSQL_PASSWORD=developer_secret
     ports:
       - "33061:3306"
 

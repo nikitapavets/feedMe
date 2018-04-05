@@ -160,6 +160,7 @@ return [
         // FeedMe\Providers\BroadcastServiceProvider::class,
         FeedMe\Providers\EventServiceProvider::class,
         FeedMe\Providers\RouteServiceProvider::class,
+        FeedMe\Providers\ResponseServiceProvider::class,
 
     ],
 
