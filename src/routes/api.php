@@ -1,3 +1,3 @@
 <?php
 
-Route::apiResource('sub-reddit', 'SubRedditController');
+Route::apiResource('subreddits', 'SubRedditsController');
