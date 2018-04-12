@@ -11,11 +11,19 @@ class SubRedditsController extends Controller
     public function index()
     {
 //        Artisan::call('subreddit:get', [
-//            'subreddit_title' => 'javascript'
+//            'subreddit_title' => 'worldnews'
 //        ]);
 
         $subreddits = SubReddit::paginate();
 
         return response()->success($subreddits);
+    }
+
+    public function show($subRedditName)
+    {
+        $subReddit = SubReddit::where('name', $subRedditName)->firstOrFail();
+        $subReddit->load(['posts']);
+
+        return response()->success($subReddit);
     }
 }

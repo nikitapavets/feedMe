@@ -14,6 +14,10 @@ class SubRedditPost extends Model
         'created_at',
     ];
 
+    protected $hidden = [
+        'sub_reddit_id',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
