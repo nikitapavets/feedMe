@@ -20,6 +20,8 @@ class CreateSubRedditPostsTable extends Migration
             $table->string('title', 1000);
             $table->string('author');
             $table->string('domain');
+            $table->text('url');
+            $table->integer('ups');
             $table->timestamps();
         });
 

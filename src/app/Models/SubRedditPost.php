@@ -11,6 +11,8 @@ class SubRedditPost extends Model
         'title',
         'author',
         'domain',
+        'url',
+        'ups',
         'created_at',
     ];
 

@@ -6,5 +6,6 @@ return [
         'base' => env('REDDIT_BASE_URL', 'https://reddit.com/'),
         'subreddit' => 'r/',
     ],
+    'limit' => 15,
 
 ];

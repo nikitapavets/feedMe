@@ -2,6 +2,7 @@
 
 namespace NikitaPavets\Reddit;
 
+use FeedMe\Exceptions\NotFoundHttpException;
 use GuzzleHttp\Client;
 
 class RedditService
@@ -26,6 +27,7 @@ class RedditService
         $response = $this->client->get($this->makeUrl(config('reddit.url.subreddit').$name), [
             'query' => [
                 'after' => $lastPostName,
+                'limit' => config('reddit.limit'),
             ],
         ]);
 
@@ -34,9 +36,13 @@ class RedditService
 
     private function parseSubRedditResponse($decodedResponse)
     {
+        if(!$decodedResponse['data']['after'] && !$decodedResponse['data']['before']) {
+            throw new NotFoundHttpException();
+        }
+
         $response = [
-            'name'          => '',
-            'title'        => '',
+            'name'        => '',
+            'title'       => '',
             'after'       => $decodedResponse['data']['after'],
             'posts_count' => $decodedResponse['data']['dist'],
             'posts'       => [],
@@ -61,8 +67,10 @@ class RedditService
         return [
             'name'       => $subReddit['name'],
             'title'      => $subReddit['title'],
-            'author'      => $subReddit['author'],
-            'domain'      => $subReddit['domain'],
+            'author'     => $subReddit['author'],
+            'domain'     => $subReddit['domain'],
+            'url'        => $subReddit['url'],
+            'ups'        => $subReddit['ups'],
             'created_at' => date('Y-m-d H:i:s', $subReddit['created']),
         ];
     }

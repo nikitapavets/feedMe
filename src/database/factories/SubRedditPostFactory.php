@@ -9,5 +9,7 @@ $factory->define(SubRedditPost::class, function (Faker $faker) {
         'title'  => $faker->words(5, true),
         'author' => $faker->userName,
         'domain' => $faker->domainName,
+        'url'    => $faker->url,
+        'ups'    => $faker->numberBetween(1, 1000),
     ];
 });

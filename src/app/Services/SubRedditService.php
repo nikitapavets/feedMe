@@ -3,6 +3,7 @@
 namespace FeedMe\Services;
 
 use FeedMe\Models\SubReddit;
+use FeedMe\Models\SubRedditPost;
 
 class SubRedditService
 {
@@ -21,5 +22,25 @@ class SubRedditService
         }
 
         return null;
+    }
+
+    /**
+     * @param array $subRedditInfo
+     *
+     * @return SubReddit
+     */
+    public function storeSubRedditInfo($subRedditInfo)
+    {
+        $subReddit = SubReddit::updateOrCreate(['name' => $subRedditInfo['name']], $subRedditInfo);
+
+        $subRedditPosts = [];
+        foreach ($subRedditInfo['posts'] as $subRedditPostData) {
+            $subRedditPosts[] = array_merge($subRedditPostData, [
+                'sub_reddit_id' => $subReddit->id,
+            ]);
+        }
+        SubRedditPost::insert($subRedditPosts);
+
+        return $subReddit;
     }
 }
