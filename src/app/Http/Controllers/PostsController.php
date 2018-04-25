@@ -5,24 +5,34 @@ namespace FeedMe\Http\Controllers;
 use FeedMe\Exceptions\AlreadyExistException;
 use FeedMe\Http\Requests\SubRedditStoreRequest;
 use FeedMe\Models\SubReddit;
+use FeedMe\Models\SubRedditPost;
 use FeedMe\Services\SubRedditService;
 use NikitaPavets\Reddit\RedditFacade;
 
-class SubRedditsController extends Controller
+class PostsController extends Controller
 {
-    public function index()
+    public function show($postName, SubRedditService $subRedditService)
     {
-        $subreddits = SubReddit::orderByDesc('id')->paginate();
+        $post = SubRedditPost::where('name', $postName)->firstOrFail();
+//        $subReddit->load(['comments']);
 
-        return response()->success($subreddits);
-    }
+        if(!$post->comments) {
+            $subRedditInfo = RedditFacade::getPostComments(
+                $post->permalink
+            );
+        }
 
-    public function show($subRedditName)
-    {
-        $subReddit = SubReddit::where('name', $subRedditName)->firstOrFail();
-        $subReddit->load(['posts']);
+//        if($subReddit) {
+//            throw new AlreadyExistException();
+//        }
+//
+//        $subRedditInfo = RedditFacade::getSubRedditInfo(
+//            $subRedditTitle,
+//            $subRedditService->getLastPostNameBySubRedditTitle($subRedditTitle)
+//        );
+//        $subReddit = $subRedditService->storeSubRedditInfo($subRedditInfo);
 
-        return response()->success($subReddit);
+//        return response()->success($subReddit);
     }
 
     public function store(SubRedditStoreRequest $request, SubRedditService $subRedditService)

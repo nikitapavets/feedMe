@@ -22,14 +22,28 @@ class RedditService
         $this->client = $client;
     }
 
-    public function getSubRedditInfo($name, $lastPostName = '')
+    public function getSubRedditInfo($subredditName, $lastPostName = '')
     {
-        $response = $this->client->get($this->makeUrl(config('reddit.url.subreddit').$name), [
+        $response = $this->client->get($this->getSubredditUrl($subredditName), [
             'query' => [
                 'after' => $lastPostName,
                 'limit' => config('reddit.limit'),
             ],
         ]);
+
+        return $this->parseSubRedditResponse($this->decodeResponse($response));
+    }
+
+    public function getPostComments($permalink, $lastCommentName = '')
+    {
+        $response = $this->client->get($this->makeUrl('r/PHP/comments/8bv9n5/library_tool_discovery_thread_20180413/'), [
+            'query' => [
+                'after' => $lastCommentName,
+                'limit' => config('reddit.limit'),
+            ],
+        ]);
+
+        dd($this->decodeResponse($response));
 
         return $this->parseSubRedditResponse($this->decodeResponse($response));
     }
@@ -65,13 +79,15 @@ class RedditService
     private function parsePost($subReddit)
     {
         return [
-            'name'       => $subReddit['name'],
-            'title'      => $subReddit['title'],
-            'author'     => $subReddit['author'],
-            'domain'     => $subReddit['domain'],
-            'url'        => $subReddit['url'],
-            'ups'        => $subReddit['ups'],
-            'created_at' => date('Y-m-d H:i:s', $subReddit['created']),
+            'name'        => $subReddit['name'],
+            'title'       => $subReddit['title'],
+            'description' => $subReddit['selftext_html'],
+            'author'      => $subReddit['author'],
+            'domain'      => $subReddit['domain'],
+            'url'         => $subReddit['url'],
+            'ups'         => $subReddit['ups'],
+            'permalink'   => $subReddit['permalink'],
+            'created_at'  => date('Y-m-d H:i:s', $subReddit['created']),
         ];
     }
 
@@ -83,5 +99,14 @@ class RedditService
     private function makeUrl($url)
     {
         return config('reddit.url.base').$url.'.json';
+    }
+
+    private function getSubredditUrl($subredditName)
+    {
+        return $this->makeUrl(sprintf("%s%s",
+                config('reddit.url.subreddit'),
+                $subredditName
+            )
+        );
     }
 }

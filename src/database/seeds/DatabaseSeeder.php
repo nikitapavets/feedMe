@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
          $this->call(SubRedditSeeder::class);
          $this->call(SubRedditPostSeeder::class);
+         $this->call(SubRedditPostCommentSeeder::class);
     }
 }

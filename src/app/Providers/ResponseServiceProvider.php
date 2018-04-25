@@ -12,6 +12,7 @@ class ResponseServiceProvider extends ServiceProvider
     const HTTP_RESPONSE_UNAUTHORIZED = 401;
     const HTTP_RESPONSE_FORBIDDEN = 403;
     const HTTP_RESPONSE_NOT_FOUND = 404;
+    const HTTP_RESPONSE_CONFLICT = 409;
     const HTTP_UNPROCESSABLE_ENTITY = 422;
     const HTTP_RESPONSE_SERVER_ERROR = 500;
 

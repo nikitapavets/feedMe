@@ -9,10 +9,12 @@ class SubRedditPost extends Model
     protected $fillable = [
         'name',
         'title',
+        'description',
         'author',
         'domain',
         'url',
         'ups',
+        'permalink',
         'created_at',
     ];
 
@@ -26,5 +28,13 @@ class SubRedditPost extends Model
     public function subReddit()
     {
         return $this->belongsTo(SubReddit::class, 'sub_reddit_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(SubRedditPostComment::class, 'sub_reddit_post_id');
     }
 }

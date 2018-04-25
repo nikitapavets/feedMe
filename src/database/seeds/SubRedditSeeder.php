@@ -12,6 +12,9 @@ class SubRedditSeeder extends Seeder
      */
     public function run()
     {
-        factory(SubReddit::class, config('seeder.count.sub_reddits'))->create();
+        factory(SubReddit::class)->create([
+            'id' => config('seeder.default.id'),
+            'name' => config('seeder.default.value'),
+        ]);
     }
 }

@@ -13,10 +13,10 @@ class SubRedditPostSeeder extends Seeder
      */
     public function run()
     {
-        SubReddit::all()->each(function (SubReddit $subReddit) {
-            $subReddit->posts()->saveMany(
-                factory(SubRedditPost::class, config('seeder.count.sub_reddit_posts'))->make()
-            );
-        });
+        factory(SubRedditPost::class)->create([
+            'id'            => config('seeder.default.id'),
+            'sub_reddit_id' => config('seeder.default.id'),
+            'name'          => config('seeder.default.value'),
+        ]);
     }
 }

@@ -77,6 +77,7 @@ class Handler extends ExceptionHandler
             case ($exception instanceof \FeedMe\Exceptions\NotFoundHttpException):
             case ($exception instanceof \FeedMe\Exceptions\AuthorizationException):
             case ($exception instanceof \FeedMe\Exceptions\BadRequestHttpException):
+            case ($exception instanceof \FeedMe\Exceptions\AlreadyExistException):
             case ($exception instanceof InternalServerErrorHttpException): {
                 return response()->error(
                     $exception->getMessage(),
