@@ -18,7 +18,7 @@ class CreateSubRedditPostsTable extends Migration
             $table->unsignedInteger('sub_reddit_id');
             $table->string('name')->unique();
             $table->string('title', 1000);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('author');
             $table->string('domain');
             $table->string('permalink');

@@ -20,7 +20,24 @@ class SubRedditPost extends Model
 
     protected $hidden = [
         'sub_reddit_id',
+        'comments_grid',
+        'comments',
     ];
+
+    protected $appends = [
+        'comments_count',
+        'comments_grid'
+    ];
+
+    public function getCommentsCountAttribute()
+    {
+        return $this->comments()->count();
+    }
+
+    public function getCommentsGridAttribute()
+    {
+        return $this->getCommentsGrid($this->comments, config('seeder.default.id'));
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo
@@ -36,5 +53,25 @@ class SubRedditPost extends Model
     public function comments()
     {
         return $this->hasMany(SubRedditPostComment::class, 'sub_reddit_post_id');
+    }
+
+    public function getCommentsGrid($comments, $rootId)
+    {
+        $gridRootBranch = [];
+
+        foreach ($comments as $comment) {
+            if($this->isRootComment($comment, $rootId)) {
+                $gridRootNode = $comment;
+                $gridNode['children'] = $this->getCommentsGrid($comment->children, $comment->id);
+                $gridRootBranch[] = $gridRootNode;
+            }
+        }
+
+        return $gridRootBranch;
+    }
+
+    public function isRootComment($comment, $rootId)
+    {
+        return $comment->parent_id === (int) $rootId;
     }
 }

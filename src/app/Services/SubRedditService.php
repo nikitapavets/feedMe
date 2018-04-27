@@ -4,6 +4,7 @@ namespace FeedMe\Services;
 
 use FeedMe\Models\SubReddit;
 use FeedMe\Models\SubRedditPost;
+use FeedMe\Models\SubRedditPostComment;
 
 class SubRedditService
 {
@@ -18,10 +19,23 @@ class SubRedditService
 
         if ($subReddit) {
             $lastSubRedditPost = $subReddit->posts()->orderByDesc('id')->first();
+
             return $lastSubRedditPost ? $lastSubRedditPost->name : null;
         }
 
         return null;
+    }
+
+    /**
+     * @param SubRedditPost $post
+     *
+     * @return mixed|null
+     */
+    public function getLastCommentNameByPost(SubRedditPost $post)
+    {
+        $lastComment = $post->comments()->orderByDesc('id')->first();
+
+        return $lastComment ? $lastComment->name : null;
     }
 
     /**
@@ -42,5 +56,20 @@ class SubRedditService
         SubRedditPost::insert($subRedditPosts);
 
         return $subReddit;
+    }
+
+
+    public function storePostCommentsInfo($postCommentsInfo, $postId, $parentId)
+    {
+        foreach ($postCommentsInfo as $commentInfo) {
+            $commentEntity = SubRedditPostComment::create(array_merge($commentInfo, [
+                'sub_reddit_post_id' => $postId,
+                'parent_id'          => $parentId,
+            ]));
+
+            if ($commentInfo['children']) {
+                $this->storePostCommentsInfo($commentInfo['children'], $postId, $commentEntity->id);
+            }
+        }
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class SubRedditPostComment extends Model
 {
     protected $fillable = [
+        'sub_reddit_post_id',
+        'parent_id',
         'name',
         'message',
         'author',

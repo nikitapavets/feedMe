@@ -36,16 +36,14 @@ class RedditService
 
     public function getPostComments($permalink, $lastCommentName = '')
     {
-        $response = $this->client->get($this->makeUrl('r/PHP/comments/8bv9n5/library_tool_discovery_thread_20180413/'), [
+        $response = $this->client->get($this->makeUrl($permalink), [
             'query' => [
                 'after' => $lastCommentName,
                 'limit' => config('reddit.limit'),
             ],
         ]);
 
-        dd($this->decodeResponse($response));
-
-        return $this->parseSubRedditResponse($this->decodeResponse($response));
+        return $this->parsePostResponse($this->decodeResponse($response)[1]);
     }
 
     private function parseSubRedditResponse($decodedResponse)
@@ -88,6 +86,38 @@ class RedditService
             'ups'         => $subReddit['ups'],
             'permalink'   => $subReddit['permalink'],
             'created_at'  => date('Y-m-d H:i:s', $subReddit['created']),
+        ];
+    }
+
+    private function parsePostResponse($decodedResponse)
+    {
+//        if(!$decodedResponse['data']['after'] && !$decodedResponse['data']['before']) {
+//            throw new NotFoundHttpException();
+//        }
+        $comments = $decodedResponse['data']['children'];
+        $response = [];
+        foreach ($comments as $comment) {
+            $comment = $comment['data'];
+            $parsedComment = $this->parseComment($comment);
+            $parsedComment['children'] = [];
+            if($comment['replies']) {
+                $parsedComment['children'] = $this->parsePostResponse($comment['replies']);
+            }
+            $response[] = $parsedComment;
+        }
+        return $response;
+    }
+
+    private function parseComment($comment)
+    {
+        return [
+            'parent_id'  => $comment['parent_id'],
+            'name'       => $comment['id'],
+            'message'    => $comment['body'],
+            'author'     => $comment['author'],
+            'permalink'  => $comment['permalink'],
+            'ups'        => $comment['ups'],
+            'created_at' => date('Y-m-d H:i:s', $comment['created']),
         ];
     }
 
