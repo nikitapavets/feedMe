@@ -15,14 +15,14 @@ class DownloadSubreddit extends Command
      *
      * @var string
      */
-    protected $signature = 'subreddit:get {subreddit_title}';
+    protected $signature = 'subreddit:get';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Get full information of the subreddit.';
+    protected $description = 'Get full information of a subreddit.';
 
     /**
      * @var SubRedditService
@@ -52,14 +52,22 @@ class DownloadSubreddit extends Command
      */
     private function getSubRedditInfo()
     {
-        $subRedditTitle = $this->argument('subreddit_title');
-
-        $this->info("Getting {$subRedditTitle} posts...");
+        $subreddit = SubReddit::orderBy('updated_at')->first();
 
         $subRedditInfo = RedditFacade::getSubRedditInfo(
-            $subRedditTitle,
-            $this->subRedditService->getLastPostNameBySubRedditTitle($subRedditTitle)
+            $subreddit->title,
+            $this->subRedditService->getLastPostNameBySubRedditTitle($subreddit->title)
         );
+        $subReddit = $this->subRedditService->storeSubRedditInfo($subRedditInfo);
+
+        $subReddit->posts()->each(function(SubRedditPost $post) {
+            $post->comments()->delete();
+            $postCommentsInfo = RedditFacade::getPostComments(
+                $post->permalink,
+                $this->subRedditService->getLastCommentNameByPost($post)
+            );
+            $this->subRedditService->storePostCommentsInfo($postCommentsInfo, $post->id, config('seeder.default.id'));
+        });
 
         $this->info("Done!");
 

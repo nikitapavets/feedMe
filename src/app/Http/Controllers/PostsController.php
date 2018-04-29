@@ -26,22 +26,4 @@ class PostsController extends Controller
 
         return response()->success($post);
     }
-
-    public function store(SubRedditStoreRequest $request, SubRedditService $subRedditService)
-    {
-        $subRedditTitle = $request->name;
-        $subReddit = SubReddit::where('title', $subRedditTitle)->first();
-
-        if ($subReddit) {
-            throw new AlreadyExistException();
-        }
-
-        $subRedditInfo = RedditFacade::getSubRedditInfo(
-            $subRedditTitle,
-            $subRedditService->getLastPostNameBySubRedditTitle($subRedditTitle)
-        );
-        $subReddit = $subRedditService->storeSubRedditInfo($subRedditInfo);
-
-        return response()->success($subReddit);
-    }
 }

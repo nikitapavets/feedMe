@@ -1,4 +1,10 @@
 <?php
 
-Route::apiResource('subreddits', 'SubRedditsController');
-Route::apiResource('posts', 'PostsController');
+Route::apiResource('subreddits', 'SubRedditsController')->only([
+    'index',
+    'show',
+    'store',
+]);
+Route::apiResource('posts', 'PostsController')->only([
+    'show',
+]);;
