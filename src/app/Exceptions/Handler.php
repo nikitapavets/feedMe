@@ -19,8 +19,7 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-    protected $dontReport
-        = [
+    protected $dontReport = [
             //
         ];
 
@@ -29,8 +28,7 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-    protected $dontFlash
-        = [
+    protected $dontFlash = [
             'password',
             'password_confirmation',
         ];
@@ -50,54 +48,60 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param Exception                $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param $request
+     * @param Exception $exception
+     * @return mixed
      * @throws InternalServerErrorHttpException
      * @throws \FeedMe\Exceptions\AuthorizationException
      * @throws \FeedMe\Exceptions\BadRequestHttpException
+     * @throws \FeedMe\Exceptions\NotFoundHttpException
      */
     public function render($request, Exception $exception)
     {
         switch ($exception) {
-            case ($exception instanceof AuthorizationException): {
-                throw new \FeedMe\Exceptions\AuthorizationException();
-            }
-            case ($exception instanceof ValidationException): {
-                throw new \FeedMe\Exceptions\BadRequestHttpException($exception->getResponse()->original);
-            }
-            case ($exception instanceof BadRequestHttpException): {
-                throw new \FeedMe\Exceptions\BadRequestHttpException();
-            }
+            case ($exception instanceof AuthorizationException):
+                {
+                    throw new \FeedMe\Exceptions\AuthorizationException();
+                }
+            case ($exception instanceof ValidationException):
+                {
+                    throw new \FeedMe\Exceptions\BadRequestHttpException($exception->getResponse()->original);
+                }
+            case ($exception instanceof BadRequestHttpException):
+                {
+                    throw new \FeedMe\Exceptions\BadRequestHttpException();
+                }
             case ($exception instanceof ModelNotFoundException):
-            case ($exception instanceof NotFoundHttpException): {
-                throw new \FeedMe\Exceptions\NotFoundHttpException();
-            }
+            case ($exception instanceof NotFoundHttpException):
+                {
+                    throw new \FeedMe\Exceptions\NotFoundHttpException();
+                }
             case ($exception instanceof \FeedMe\Exceptions\NotFoundHttpException):
             case ($exception instanceof \FeedMe\Exceptions\AuthorizationException):
             case ($exception instanceof \FeedMe\Exceptions\BadRequestHttpException):
             case ($exception instanceof \FeedMe\Exceptions\AlreadyExistException):
-            case ($exception instanceof InternalServerErrorHttpException): {
-                return response()->error(
-                    $exception->getMessage(),
-                    $exception->getCode()
-                );
-            }
-            default: {
-                if (config('app.debug')) {
-                    return parent::render($request, $exception);
+            case ($exception instanceof InternalServerErrorHttpException):
+                {
+                    return response()->error(
+                        $exception->getMessage(),
+                        $exception->getCode()
+                    );
                 }
+            default:
+                {
+                    if (config('app.debug')) {
+                        return parent::render($request, $exception);
+                    }
 
-                throw new InternalServerErrorHttpException();
-            }
+                    throw new InternalServerErrorHttpException();
+                }
         }
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request                 $request
+     * @param  \Illuminate\Http\Request $request
      * @param  \Illuminate\Auth\AuthenticationException $exception
      *
      * @return \Illuminate\Http\Response

@@ -10,7 +10,6 @@ class SubRedditService
 {
     /**
      * @param $title
-     *
      * @return null
      */
     public function getLastPostNameBySubRedditTitle($title)
@@ -28,8 +27,7 @@ class SubRedditService
 
     /**
      * @param SubRedditPost $post
-     *
-     * @return mixed|null
+     * @return null
      */
     public function getLastCommentNameByPost(SubRedditPost $post)
     {
@@ -39,9 +37,8 @@ class SubRedditService
     }
 
     /**
-     * @param array $subRedditInfo
-     *
-     * @return SubReddit
+     * @param $subRedditInfo
+     * @return mixed
      */
     public function storeSubRedditInfo($subRedditInfo)
     {
@@ -58,13 +55,17 @@ class SubRedditService
         return $subReddit;
     }
 
-
+    /**
+     * @param $postCommentsInfo
+     * @param $postId
+     * @param $parentId
+     */
     public function storePostCommentsInfo($postCommentsInfo, $postId, $parentId)
     {
         foreach ($postCommentsInfo as $commentInfo) {
             $commentEntity = SubRedditPostComment::create(array_merge($commentInfo, [
                 'sub_reddit_post_id' => $postId,
-                'parent_id'          => $parentId,
+                'parent_id' => $parentId,
             ]));
 
             if ($commentInfo['children']) {

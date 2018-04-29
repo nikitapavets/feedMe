@@ -29,11 +29,17 @@ class SubRedditPost extends Model
         'comments_grid'
     ];
 
+    /**
+     * @return mixed
+     */
     public function getCommentsCountAttribute()
     {
         return $this->comments()->count();
     }
 
+    /**
+     * @return array
+     */
     public function getCommentsGridAttribute()
     {
         return $this->getCommentsGrid($this->comments, config('seeder.default.id'));
@@ -55,12 +61,17 @@ class SubRedditPost extends Model
         return $this->hasMany(SubRedditPostComment::class, 'sub_reddit_post_id');
     }
 
+    /**
+     * @param $comments
+     * @param $rootId
+     * @return array
+     */
     public function getCommentsGrid($comments, $rootId)
     {
         $gridRootBranch = [];
 
         foreach ($comments as $comment) {
-            if($this->isRootComment($comment, $rootId)) {
+            if ($this->isRootComment($comment, $rootId)) {
                 $gridRootNode = $comment;
                 $gridNode['children'] = $this->getCommentsGrid($comment->children, $comment->id);
                 $gridRootBranch[] = $gridRootNode;
@@ -70,8 +81,13 @@ class SubRedditPost extends Model
         return $gridRootBranch;
     }
 
+    /**
+     * @param $comment
+     * @param $rootId
+     * @return bool
+     */
     public function isRootComment($comment, $rootId)
     {
-        return $comment->parent_id === (int) $rootId;
+        return $comment->parent_id === (int)$rootId;
     }
 }

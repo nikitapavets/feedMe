@@ -14,9 +14,9 @@ class SubRedditPostSeeder extends Seeder
     public function run()
     {
         factory(SubRedditPost::class)->create([
-            'id'            => config('seeder.default.id'),
+            'id' => config('seeder.default.id'),
             'sub_reddit_id' => config('seeder.default.id'),
-            'name'          => config('seeder.default.value'),
+            'name' => config('seeder.default.value'),
         ]);
     }
 }

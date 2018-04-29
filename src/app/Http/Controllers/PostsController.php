@@ -32,7 +32,7 @@ class PostsController extends Controller
         $subRedditTitle = $request->name;
         $subReddit = SubReddit::where('title', $subRedditTitle)->first();
 
-        if($subReddit) {
+        if ($subReddit) {
             throw new AlreadyExistException();
         }
 

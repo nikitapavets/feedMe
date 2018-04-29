@@ -13,9 +13,9 @@ class SubRedditPostCommentSeeder extends Seeder
     public function run()
     {
         factory(SubRedditPostComment::class)->create([
-            'id'                 => config('seeder.default.id'),
+            'id' => config('seeder.default.id'),
             'sub_reddit_post_id' => config('seeder.default.id'),
-            'parent_id'          => config('seeder.default.id'),
+            'parent_id' => config('seeder.default.id'),
         ]);
     }
 }

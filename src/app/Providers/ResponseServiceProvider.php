@@ -25,18 +25,19 @@ class ResponseServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Response::macro('success', function ($data = [], $meta = null, $code = ResponseServiceProvider::HTTP_RESPONSE_SUCCESS) {
-            if ($meta) {
-                $data['meta'] = $meta;
-            }
-            if(!$data) {
-                $data['message'] = ResponseServiceProvider::MESSAGE_SUCCESS;
-            }
+        Response::macro('success',
+            function ($data = [], $meta = null, $code = ResponseServiceProvider::HTTP_RESPONSE_SUCCESS) {
+                if ($meta) {
+                    $data['meta'] = $meta;
+                }
+                if (!$data) {
+                    $data['message'] = ResponseServiceProvider::MESSAGE_SUCCESS;
+                }
 
-            return Response::json($data, $code);
-        });
+                return Response::json($data, $code);
+            });
 
-        Response::macro('error', function($error, $code = ResponseServiceProvider::HTTP_RESPONSE_NOT_FOUND) {
+        Response::macro('error', function ($error, $code = ResponseServiceProvider::HTTP_RESPONSE_NOT_FOUND) {
             return Response::json($error, $code);
         });
     }

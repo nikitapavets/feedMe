@@ -20,7 +20,8 @@ abstract class Request extends FormRequest
         return [];
     }
 
-    public function rules() {
+    public function rules()
+    {
         return [];
     }
 }
