@@ -1,0 +1,13 @@
+{
+    "name": "nikitapavets/reddit-api-client",
+    "description": "Reddit API client for Laravel application",
+    "authors": [
+        {
+            "name": "Nikita Pavets",
+            "email": "nikitapavets@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    }
+}
